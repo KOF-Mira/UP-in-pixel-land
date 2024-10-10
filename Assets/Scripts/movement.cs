@@ -5,7 +5,7 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     Rigidbody2D MyRB;
-    int playerstate; //0 is standing, 1 is walking (holding down horizontal movement), 2 is braking (friction is applied), 3 is jumping
+    int playerstate; //0 is standing, 1 is walking (holding down horizontal movement), 2 is braking (friction is applied), 3 is not grounded
     Vector2 playervelocity;
     public float stopmagnitude;
 
@@ -25,7 +25,7 @@ public class movement : MonoBehaviour
             playerstate = 0;
             playervelocity = new Vector2(0f,0f);
         }
-        if (Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.A) && playervelocity.y == 0f)
+        if (Input.GetKey(KeyCode.D)||Input.GetKey(KeyCode.A) && playervelocity.y > 0f)
         {
             playerstate = 1;
         }
@@ -33,7 +33,7 @@ public class movement : MonoBehaviour
         {
             playerstate = 3;
         }
-        if (Input.GetKey(KeyCode.Space) && playervelocity.y == 0f)
+        if (Input.GetKey(KeyCode.Space) && playervelocity.y < stopmagnitude * 3 && playervelocity.y > -stopmagnitude * 3)
         {
             playervelocity = new Vector2(0f,10f);
         }
@@ -46,5 +46,6 @@ public class movement : MonoBehaviour
             MyRB.AddForce(Vector2.left);
         }
         print("playerstate is ..." + playerstate);
+        MyRB.velocity = playervelocity;
     }
 }
